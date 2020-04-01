@@ -5,7 +5,6 @@ HarvesterOpt is a Matlab code to solve an optimization problem to maximize the e
 This package include the follwing files:
 
 * CrossEntropyOpt_Example.m.  -- script with an one dimensional optimization with the CE method
-
 * HarvesterOpt_DirectSearch.m -- script with a program to optimize the harveters via direct serach
 
 * HarvesterOpt_CrossEntropy.m -- script with a program to optimize the harveters via CE method
