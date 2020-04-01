@@ -16,6 +16,9 @@ This package include the follwing files:
 * graph_contour_pnt.m         -- function to plot a contourmap and a given point
 * graph_binarymap.m           -- function to plot a binary contourmap
 
+Further details about can be seen in:
+
+*Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020 https://hal.archives-ouvertes.fr/hal-01531845v2*
 
 ## Author:
 Americo Cunha (UERJ)
