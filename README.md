@@ -21,8 +21,7 @@ Further details about can be seen in:
 *Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020 https://hal.archives-ouvertes.fr/hal-01531845v2*
 
 ## Author
-Americo Cunha
-Rio de Janeiro State University (UERJ)
+Americo Cunha - Rio de Janeiro State University (UERJ)
 
 http://www.americocunha.org
 
