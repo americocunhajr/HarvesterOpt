@@ -20,13 +20,11 @@ This package include the follwing files:
 * graph_binarymap.m           -- function to plot a binary contourmap
 
 
-- Citing HarvesterOpt
-
+Citing HarvesterOpt:
 We ask the code users to cite the following manuscript in any publications reporting work done with HarvesterOpt:
 
 Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020
 https://hal.archives-ouvertes.fr/hal-01531845v2
 
-- License
-
+License:
 HarvesterOpt is released under the MIT license. See the LICENSE and NOTICE files for details. All new contributions must be made under the MIT license.
