@@ -2,9 +2,6 @@
 
 HarvesterOpt is a Matlab code to solve an optimization problem to maximize the energy recovered by a bistable piezo-magneto-elastic energy harveste system.
 
-### Author:
-Americo Cunha (UERJ)
-
 This package include the follwing files:
 
 * CrossEntropyOpt_Example.m.  -- script with an one dimensional optimization with the CE method
@@ -19,6 +16,10 @@ This package include the follwing files:
 * graph_contour_pnt.m         -- function to plot a contourmap and a given point
 * graph_binarymap.m           -- function to plot a binary contourmap
 
+
+## Author:
+Americo Cunha (UERJ)
+http://www.americocunha.org
 
 ## Citing HarvesterOpt
 We ask the code users to cite the following manuscript in any publications reporting work done with HarvesterOpt:
