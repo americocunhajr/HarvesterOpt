@@ -16,8 +16,8 @@
 
 Further details about can be seen in:
 
-*Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020 
-https://hal.archives-ouvertes.fr/hal-01531845v3*
+*Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020*
+https://hal.archives-ouvertes.fr/hal-01531845v3
 
 ## Author
 Americo Cunha - Rio de Janeiro State University (UERJ)
@@ -28,7 +28,6 @@ http://www.americocunha.org
 We ask the code users to cite the following manuscript in any publications reporting work done with **HarvesterOpt**:
 
 *Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020*
-
 https://hal.archives-ouvertes.fr/hal-01531845v3
 
 ## License
