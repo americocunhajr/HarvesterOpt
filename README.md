@@ -1,4 +1,4 @@
-# HarvesterOpt
+# Harvester Optimizator
 
 **HarvesterOpt** is a Matlab code to solve an optimization problem to maximize the energy recovered by a bistable piezo-magneto-elastic energy harvesting system. This package include the follwing files:
 
@@ -32,4 +32,4 @@ We ask the code users to cite the following manuscript in any publications repor
 https://hal.archives-ouvertes.fr/hal-01531845v3*
 
 ## License
-HarvesterOpt is released under the MIT license. See the LICENSE file for details. All new contributions must be made under the MIT license.
+**HarvesterOpt** is released under the MIT license. See the LICENSE file for details. All new contributions must be made under the MIT license.
