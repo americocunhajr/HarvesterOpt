@@ -1,6 +1,6 @@
 # Harvester Optimizator
 
-**HarvesterOpt** is a Matlab code to solve an optimization problem to maximize the energy recovered by a bistable piezo-magneto-elastic energy harvesting system. This package includes the following files:
+**HarvesterOpt** is an easy to run code to solve an optimization problem to maximize the energy recovered by a bistable piezo-magneto-elastic energy harvesting system. This package includes the following files:
 
 * CrossEntropyOpt_Example.m.  -- script with an one dimensional optimization with the CE method
 * HarvesterOpt_DirectSearch.m -- script with a program to optimize the harveters via direct serach
