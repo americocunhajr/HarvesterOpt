@@ -1,4 +1,4 @@
-
+![HarveterOpt](logo/HarveterOpt.png)
 
 **HarvesterOpt - Harvester Optimizer** is an easy to run code to solve an optimization problem to maximize the energy recovered by a bistable piezo-magneto-elastic energy harvesting system. The implementation follows an educational style, to make its use very intuitive. This package includes the following files:
 
