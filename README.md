@@ -17,7 +17,7 @@ This package includes the following files:
 
 ## Software History
 
-This code was developed to optimize a nonlinear bistable piezoelectric energy harvester. The simulation results are reported in the following paper:
+This code was developed to optimize the amount of energy recovered by a nonlinear bistable piezoelectric energy harvester. The simulation results associated with this optimization process are reported in the following paper:
 - *Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020*
 https://hal.archives-ouvertes.fr/hal-01531845v3
 
