@@ -1,7 +1,6 @@
 <img src="logo/HarvesterOpt.png" width="40%">
 
 **HarvesterOpt - Harvester Optimizer** is an easy to run code to solve an optimization problem to maximize the energy recovered by a bistable piezo-magneto-elastic energy harvesting system. The implementation follows an educational style, to make its use very intuitive. This package includes the following files:
-
 * CrossEntropyOpt_Example.m.  -- script with an one dimensional optimization with the CE method
 * HarvesterOpt_DirectSearch.m -- script with a program to optimize the harveters via direct serach
 * HarvesterOpt_CrossEntropy.m -- script with a program to optimize the harveters via CE method
@@ -19,7 +18,7 @@ Further details about can be seen in:
 https://hal.archives-ouvertes.fr/hal-01531845v3
 
 ## Author
-- Americo Cunha (UERJ)
+- Americo Cunha
 
 ## Citing
 We ask the code users to cite the following manuscript in any publications reporting work done with **HarvesterOpt**:
