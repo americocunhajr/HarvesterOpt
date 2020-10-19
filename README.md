@@ -26,8 +26,20 @@ https://hal.archives-ouvertes.fr/hal-01531845v3
 
 ## Citing HarvesterOpt
 We ask the code users to cite the following manuscript in any publications reporting work done with **HarvesterOpt**:
-- *Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020*
+- *A. Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020*
 https://hal.archives-ouvertes.fr/hal-01531845v3
+
+```
+@article{CunhaJr2020,
+  author  = {A. {Cunha~Jr}},
+  title   = {Enhancing the performance of a bistable energy harvesting device via the cross-entropy method},
+  journal = {Preprint},
+  year    = {2020},
+  volume  = {~},
+  pages   = {~},
+  note    = {https://hal.archives-ouvertes.fr/hal-01531845v3},
+}
+```
 
 ## License
 **HarvesterOpt** is released under the MIT license. See the LICENSE file for details. All new contributions must be made under the MIT license.
