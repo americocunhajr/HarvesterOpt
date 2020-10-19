@@ -31,13 +31,13 @@ https://hal.archives-ouvertes.fr/hal-01531845v3
 
 ```
 @article{CunhaJr2020,
-  author  = {A. {Cunha~Jr}},
-  title   = {Enhancing the performance of a bistable energy harvesting device via the cross-entropy method},
-  journal = {Preprint},
-  year    = {2020},
-  volume  = {~},
-  pages   = {~},
-  note    = {https://hal.archives-ouvertes.fr/hal-01531845v3},
+   author  = {A. {Cunha~Jr}},
+   title   = {Enhancing the performance of a bistable energy harvesting device via the cross-entropy method},
+   journal = {Preprint},
+   year    = {2020},
+   volume  = {~},
+   pages   = {~},
+   note    = {https://hal.archives-ouvertes.fr/hal-01531845v3},
 }
 ```
 
