@@ -1,5 +1,5 @@
 % -----------------------------------------------------------------
-%  HarvesterOpt_CrossEntropy2varNoise.m
+%  HarvesterOpt_CrossEntropy4var.m
 % -----------------------------------------------------------------
 %  This program solves an optimization problem that seaks to 
 %  maximize the mean output power of a piezo-magneto-elastic
@@ -34,7 +34,7 @@
 %  a stochastic metaheuristic that 'transforms' the optimization 
 %  problem into a rare event estimation problem.
 %  
-%  The design variables are: (f,omega)
+%  The design variables are: (ksi,chi,lambda,kappa)
 %  
 %  Reference:
 %  A. Cunha Jr
@@ -44,7 +44,7 @@
 %  programmer: Americo Cunha
 %              americo.cunha@uerj.br
 %
-%  last update: October 23, 2020
+%  last update: October 22, 2020
 % -----------------------------------------------------------------
 
 
@@ -56,7 +56,7 @@ close all
 % program header
 % -----------------------------------------------------------
 disp(' ---------------------------------------------------')
-disp(' Noisily Piezo-Magneto-Elastic Harvester Optimizer  ')
+disp(' Piezo-Magneto-Elastic Harvester Optimization       ')
 disp(' (cross-entropy method)                             ')
 disp('                                                    ')
 disp(' by                                                 ')
@@ -69,7 +69,7 @@ disp(' ---------------------------------------------------')
 
 % simulation information
 % -----------------------------------------------------------
-case_name = 'HarvesterOpt_CE_2var_Noise';
+case_name = 'HarvesterOpt_CE_4var';
 
 disp(' '); 
 disp([' Case Name: ',num2str(case_name)]);
@@ -87,12 +87,12 @@ disp(' ');
 disp('    ... ');
 disp(' ');
 
-ksi    = 0.01;  % mechanical damping ratio
-chi    = 0.05;  % dimensionless piezoeletric coupling term (mechanical)
-lambda = 0.05;  % dimensionless time constant reciprocal
-kappa  = 0.5;   % dimensionless piezoeletric coupling term (eletrical)
-%f      = 0.115; % dimensionless excitation amplitude
-%Omega  = 0.8;   % dimensionless excitation frequency
+%ksi    = 0.01;  % mechanical damping ratio
+%chi    = 0.05;  % dimensionless piezoeletric coupling term (mechanical)
+%lambda = 0.05;  % dimensionless time constant reciprocal
+%kappa  = 0.5;   % dimensionless piezoeletric coupling term (eletrical)
+f      = 0.083; % dimensionless excitation amplitude
+Omega  = 0.8;   % dimensionless excitation frequency
 
 x0    = 1.0; % dimensionless initial displacement
 xdot0 = 0.0;  % dimensionless initial velocity
@@ -110,10 +110,6 @@ disp(' --- defining model parameters --- ');
 disp(' ');
 disp('    ... ');
 disp(' ');
-
-% RNG seed (seed is fixed for reprodutibility)
-rng_stream = RandStream('mt19937ar','Seed',30081984);
-RandStream.setGlobalStream(rng_stream);
 
 % tolerance for 0-1 test
 tol01 = 0.1;
@@ -170,13 +166,17 @@ disp('    ... ');
 disp(' ');
 
 % number of design variables
-Ndv = 2;
+Ndv = 4;
+
+% RNG seed (seed is fixed for reprodutibility)
+rng_stream = RandStream('mt19937ar','Seed',30081984);
+RandStream.setGlobalStream(rng_stream);
 
 % maximum number of iterations
-maxiter = 200;
+maxiter = 100;
 
 % cross-entropy tolerance
-tolCE = 1/512;
+tolCE = 1.0e-2;
 
 % smoothing parameter (0 < alpha <= 1) 
 % -- set alpha = 1 for no smoothing --
@@ -196,7 +196,7 @@ H = 10.0;
 rho = 0.1;
 
 % number of cross-entropy samples
-NCE = 50;
+NCE = 100;
 
 % elite samples index
 Nelite = NCE - ceil(rho*NCE) + 1;
@@ -214,25 +214,26 @@ power = zeros(NCE,maxiter);
 K01 = zeros(NCE,maxiter);
 
 % preallocate memory for design variables samples
-%X = zeros(NCE*maxiter,Ndv);
 X1 = zeros(NCE,maxiter);
 X2 = zeros(NCE,maxiter);
+X3 = zeros(NCE,maxiter);
+X4 = zeros(NCE,maxiter);
 
-% initialize ObjFunc maximum
+% initialize PerfFunc maximum value
 S_opt = -Inf;
 
-% initialize power maximum
+% initialize power maximum value
 power_opt = -Inf;
 
-% initialize K01 maximum
+% initialize K01 maximum value
 K01_opt = -Inf;
 
 % initialize maximum point
 X_opt = zeros(Ndv,1);
 
-% limits for the design variables: (f,Omega)
-X_min = [0.08; 0.75];
-X_max = [0.10; 0.85];
+% limits for the design variables: (ksi,chi,lambda,kappa)
+X_min = [0.01; 0.050; 0.050; 0.50];
+X_max = [0.05; 0.200; 0.200; 1.50];
 
 % initialize mean and std dev vectors
    mu = X_min + (X_max-X_min).*rand(Ndv,1);
@@ -256,10 +257,8 @@ hyperparam.OSflag = OSflag;
 hyperparam.H      = H;
 
 % parameters
-param.ksi    = ksi;
-param.chi    = chi;
-param.lambda = lambda;
-param.kappa  = kappa;
+param.f     = f;
+param.Omega = Omega;
 
 % define data file name
 file_name = [case_name,'.dat'];
@@ -268,14 +267,14 @@ file_name = [case_name,'.dat'];
 fileID = fopen(file_name,'w');
 
 % define data format
-formatSpec1 = '%03d %+0.4f %0.4f %1.4f %.4f %.4f %.4f %.4f \n';
-formatSpec2 = '%+0.4f %0.4f %1.4f %.4f %.4f \n';
+formatSpec1 = '%03d %+0.4f %0.4f %1.4f %.4f %.4f %.4f %.4f %.4f \n';
+formatSpec2 = '%+0.4f %0.4f %1.4f %.4f %.4f %.4f %.4f \n';
 
 % print global optimum in the data file
-fprintf(fileID,'\n t   S_max   P_max  K01    mu1    mu2   sigma1 sigma2\n');
+fprintf(fileID,'\n t   S_max   P_max  K01    mu1    mu2    mu3    mu4   sigma_max \n');
 
 % display extreme values on screen
-fprintf('\n t   S_max   P_max  K01    mu1    mu2   sigma1 sigma2\n');
+fprintf('\n t   S_max   P_max  K01    mu1    mu2    mu3    mu4   sigma_max \n');
 
 while sigma_max > tolCE && t < maxiter
         
@@ -285,42 +284,44 @@ while sigma_max > tolCE && t < maxiter
         % limit vectors for truncated Gaussian
         supp_p_l = ((X_min - mu)./sigma)*ones(1,NCE);
         supp_p_h = ((X_max - mu)./sigma)*ones(1,NCE);
-        %supp_X1_l = ((X_min(1) - mu(1))./sigma(1))*ones(NCE,1);
-        %supp_X1_h = ((X_max(1) - mu(1))./sigma(1))*ones(NCE,1);
-        %supp_X2_l = ((X_min(2) - mu(2))./sigma(2))*ones(NCE,1);
-        %supp_X2_h = ((X_max(2) - mu(2))./sigma(2))*ones(NCE,1);
         
         % generate samples from truncated normal distribution
         X1(:,t) = mu(1) + trandn(supp_p_l(1,:),supp_p_h(1,:))*sigma(1);
         X2(:,t) = mu(2) + trandn(supp_p_l(2,:),supp_p_h(2,:))*sigma(2);
-        %X1(:,t) = mu(1) + trandn(supp_X1_l,supp_X1_h)*sigma(1);
-        %X2(:,t) = mu(2) + trandn(supp_X2_l,supp_X2_h)*sigma(2);
+        X3(:,t) = mu(3) + trandn(supp_p_l(3,:),supp_p_h(3,:))*sigma(3);
+        X4(:,t) = mu(4) + trandn(supp_p_l(4,:),supp_p_h(4,:))*sigma(4);
         
-        % evaluate objective function at the samples
+        % evaluate performance function at the samples
         for n=1:NCE
         
             % update parameters
-            param.f     = X1(n,t);
-            param.Omega = X2(n,t);
+            param.ksi    = X1(n,t);
+            param.chi    = X2(n,t);
+            param.lambda = X3(n,t);
+            param.kappa  = X4(n,t);
                           
-            % penalized objective function S(x)
+            % penalized performance function S(x)
             [S(n,t),power(n,t),K01(n,t)] = ...
-                    PiezoMagBeam_ObjFuncNoise(param,hyperparam);
+                    PiezoMagBeam_ObjFunc(param,hyperparam);
         end
         
-        % sort objective function evaluations
+        % sort performance function evaluations
         [S_sort,I_sort] = sort(S(:,t));
         
         % update mean value
         mu(1) = mean(X1(I_sort(Nelite:end),t));
         mu(2) = mean(X2(I_sort(Nelite:end),t));
+        mu(3) = mean(X3(I_sort(Nelite:end),t));
+        mu(4) = mean(X4(I_sort(Nelite:end),t));
 
         % update standard deviation
         sigma(1) = std(X1(I_sort(Nelite:end),t));
         sigma(2) = std(X2(I_sort(Nelite:end),t));
+        sigma(3) = std(X3(I_sort(Nelite:end),t));
+        sigma(4) = std(X4(I_sort(Nelite:end),t));
         
-        % estimator for objective function maximum
-          S_max = S_sort(Nelite);
+        % estimator for PerfFunc maximum
+        S_max = S_sort(Nelite);
           P_max = power(I_sort(Nelite),t);
         K01_max =   K01(I_sort(Nelite),t);
         
@@ -349,21 +350,23 @@ while sigma_max > tolCE && t < maxiter
            K01_opt = K01_max;
           X_opt(1) = X1(I_sort(Nelite),t);
           X_opt(2) = X2(I_sort(Nelite),t);
+          X_opt(3) = X3(I_sort(Nelite),t);
+          X_opt(4) = X4(I_sort(Nelite),t);
         end
-            
+        
         % print local extreme values in a data file
         fprintf(fileID,formatSpec1,...
-                t,S_max,P_max,K01_max,mu(1),mu(2),sigma(1),sigma(2));
+                t,S_max,P_max,K01_max,mu(1),mu(2),mu(3),mu(4),sigma_max);
         
         % print local extreme values on screen
         fprintf(formatSpec1,...
-                t,S_max,P_max,K01_max,mu(1),mu(2),sigma(1),sigma(2));
+                t,S_max,P_max,K01_max,mu(1),mu(2),mu(3),mu(4),sigma_max);
 end
 
 % print global optimum in the data file
-fprintf(fileID,'\n\nGlobal maximum (ObjFunc power K01 f Omega):\n');
+fprintf(fileID,'\n\nGlobal maximum (ObjFunc power K01 ksi chi lambda kappa):\n');
 fprintf(fileID,formatSpec2,...
-        S_opt,power_opt,K01_opt,X_opt(1),X_opt(2));
+        S_opt,power_opt,K01_opt,X_opt(1),X_opt(2),X_opt(3),X_opt(4));
 fprintf('\n');
 
 % close data file
@@ -371,12 +374,11 @@ fclose(fileID);
 
 
 % display global optimum on the screen
-fprintf('\n\nGlobal maximum (ObjFunc power K01 f Omega):\n');
+fprintf('\n\nGlobal maximum (ObjFunc power K01 ksi chi lambda kappa):\n');
 fprintf(formatSpec2,...
-        S_opt,power_opt,K01_opt,X_opt(1),X_opt(2));
+        S_opt,power_opt,K01_opt,X_opt(1),X_opt(2),X_opt(3),X_opt(4));
 
-
-disp(' ');
+disp('   ');
 time_elapsed = toc
 %---------------------------------------------------------------
 
@@ -394,26 +396,4 @@ save([num2str(case_name),'.mat']);
 
 toc
 % -----------------------------------------------------------
-
-
-
-
-% animate cross-entropy iteration
-% ...........................................................
-vtitle = 'cross-entropy method';
-xlab   = 'excitation amplitude';
-ylab   = 'excitation frequency';
-xmin   = X_min(1);
-xmax   = X_max(1);
-ymin   = X_min(2);
-ymax   = X_max(2);
-xref = 0.0998; % obtained via direct search with a 256 x 256 grid
-yref = 0.7763; % obtained via direct search with a 256 x 256 grid
-vname  = [num2str(case_name),'__animation'];
-
-plot_ce_animation(X1,X2,(1:t),xref,yref,...
-                   vtitle,xlab,ylab,xmin,xmax,ymin,ymax);
-% ...........................................................
-
-
 

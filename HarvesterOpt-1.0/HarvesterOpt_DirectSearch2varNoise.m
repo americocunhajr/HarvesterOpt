@@ -43,7 +43,7 @@
 %  programmer: Americo Cunha
 %              americo.cunha@uerj.br
 %
-%  last update: October 4, 2020
+%  last update: October 23, 2020
 % -----------------------------------------------------------------
 
 clc
@@ -172,8 +172,8 @@ disp(' ');
 Ndv = 2;
 
 % number of points for design variables discretization
-Np1 = 16;
-Np2 = 16;
+Np1 = 256;
+Np2 = 256;
 
 % number of points in the numerical grid
 Ngrid = Np1*Np2;

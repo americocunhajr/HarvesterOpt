@@ -44,7 +44,7 @@
 %  programmer: Americo Cunha
 %              americo.cunha@uerj.br
 %
-%  last update: October 4, 2020
+%  last update: October 23, 2020
 % -----------------------------------------------------------------
 
 

@@ -1,5 +1,5 @@
 % -----------------------------------------------------------------
-%  HarvesterOpt_DirectSearch2var.m
+%  HarvesterOpt_DirectSearch4var.m
 % ----------------------------------------------------------------- 
 %  This program solves an optimization problem that seaks to 
 %  maximize the mean output power of a piezo-magneto-elastic
@@ -33,7 +33,7 @@
 %  The solution strategy is based on a direct search in a fine mesh,
 %  where the optimum is found by exhaustion of the design points. 
 %  
-%  The design variables are: (f,Omega)
+%  The design variables are: (ksi,chi,lambda,kappa)
 %  
 %  Reference:
 %  A. Cunha Jr
@@ -43,7 +43,7 @@
 %  programmer: Americo Cunha
 %              americo.cunha@uerj.br
 %
-%  last update: October 4, 2020
+%  last update: October 23, 2020
 % -----------------------------------------------------------------
 
 clc
@@ -54,7 +54,7 @@ close all
 % program header
 % -----------------------------------------------------------
 disp(' ---------------------------------------------------')
-disp(' Piezo-Magneto-Elastic Harvester Optimizator        ')
+disp(' Piezo-Magneto-Elastic Harvester Optimizer          ')
 disp(' (direct search)                                    ')
 disp('                                                    ')
 disp(' by                                                 ')
@@ -67,7 +67,7 @@ disp(' ---------------------------------------------------')
 
 % simulation information
 % -----------------------------------------------------------
-case_name = 'HarvesterOpt_DS_2var';
+case_name = 'HarvesterOpt_DS_4var';
 
 disp(' '); 
 disp([' Case Name: ',num2str(case_name)]);
@@ -85,12 +85,12 @@ disp(' ');
 disp('    ... ');
 disp(' ');
 
-ksi    = 0.01;  % mechanical damping ratio
-chi    = 0.05;  % dimensionless piezoeletric coupling term (mechanical)
-lambda = 0.05;  % dimensionless time constant reciprocal
-kappa  = 0.5;   % dimensionless piezoeletric coupling term (eletrical)
-%f      = 0.115; % dimensionless excitation amplitude
-%Omega  = 0.8;   % dimensionless excitation frequency
+%ksi    = 0.01;  % mechanical damping ratio
+%chi    = 0.05;  % dimensionless piezoeletric coupling term (mechanical)
+%lambda = 0.05;  % dimensionless time constant reciprocal
+%kappa  = 0.5;   % dimensionless piezoeletric coupling term (eletrical)
+f      = 0.083; % dimensionless excitation amplitude
+Omega  = 0.8;   % dimensionless excitation frequency
 
 x0    = 1.0;  % dimensionless initial displacement
 xdot0 = 0.0;  % dimensionless initial velocity
@@ -169,15 +169,16 @@ disp('    ... ');
 disp(' ');
 
 % number of design variables
-Ndv = 2;
+Ndv = 4;
 
 % number of points for design variables discretization
-Np1 = 256;
-Np2 = 256;
+Np1 = 16;
+Np2 = 16;
+Np3 = 16;
+Np4 = 16;
 
 % number of points in the numerical grid
-Ngrid = Np1*Np2;
-
+Ngrid = Np1*Np2*Np3*Np4;
 
 % square root of Ngrid
 sqrt_Ngrid = round(sqrt(Ngrid));
@@ -185,23 +186,23 @@ sqrt_Ngrid = round(sqrt(Ngrid));
 % penalty parameter
 H = 10.0;
 
-% limits for the design variables: (f,Omega)
-X_min = [0.08 0.75];
-X_max = [0.10 0.85];
+% limits for the design variables: (ksi,chi,lambda,kappa)
+X_min = [0.01; 0.050; 0.050; 0.50];
+X_max = [0.05; 0.200; 0.200; 1.50];
 
 % numerical grid for domain discretization
 X1 = linspace(X_min(1),X_max(1),Np1);
 X2 = linspace(X_min(2),X_max(2),Np2);
+X3 = linspace(X_min(3),X_max(3),Np3);
+X4 = linspace(X_min(4),X_max(4),Np4);
 
-% preallocate memory for the ObjFunc
+% preallocate memory for PerfFunc
 S = zeros(Ngrid,1);
 
 % preallocate memory for power function
-% (x = columns and y = lines)
 power = zeros(Ngrid,1);
 
 % preallocate memory for 0-1 classifier
-% (x = columns and y = lines)
 K01 = zeros(Ngrid,1);
 
 % preallocate memory for the optimum point
@@ -227,10 +228,8 @@ hyperparam.OSflag = OSflag;
 hyperparam.H      = H;
 
 % parameters
-param.ksi    = ksi;
-param.chi    = chi;
-param.lambda = lambda;
-param.kappa  = kappa;
+param.f     = f;
+param.Omega = Omega;
 
 % define data file name
 file_name = [case_name,'.dat'];
@@ -239,63 +238,80 @@ file_name = [case_name,'.dat'];
 fileID = fopen(file_name,'w');
 
 % define data format
-formatSpec = '%+0.4f %0.4f %1.4f %.4f %.4f  \n';
+formatSpec = '%+0.4f %0.4f %1.4f %.4f %.4f %.4f %.4f \n';
 
 % print global optimum in the data file
-fprintf(fileID,'\n S_max   P_max  K01    mu1    mu2 \n');
+fprintf(fileID,'\n S_max   P_max  K01    mu1    mu2    mu3    mu4 \n');
 
 for np1 = 1:Np1
     
 	% update design variable
-	f = X1(np1);
+    ksi = X1(np1);
     
     for np2 = 1:Np2
         
-        ngrid = np2 + (np1-1)*Np2;
-
-        % print loop indicador
-        if mod(ngrid,sqrt_Ngrid) == 0
-            disp(['ngrid = ',num2str(ngrid)]);
-        end
-       
         % update design variable
-        Omega = X2(np2);
-        
-        % define physical paramters vector
-        param.f     = f;
-        param.Omega = Omega;
-                          
-        % penalized objective function S(x)
-        [S(ngrid),power(ngrid),K01(ngrid)] = ...
-                    PiezoMagBeam_ObjFunc(param,hyperparam);
-        
-        % update global maximum
-        if S(ngrid) > S_opt
+        chi = X2(np2);
             
-              S_opt =     S(ngrid);
-          power_opt = power(ngrid);
-            K01_opt =   K01(ngrid);
-              X_opt = [f; Omega];
+        for np3 = 1:Np3
+
+        % update design variable
+        lambda = X3(np3);
+            
+            for np4 = 1:Np4
+                
+                ngrid = np4 + (np3-1)*Np4 + ...
+                              (np2-1)*Np4*Np3 + ...
+                              (np1-1)*Np4*Np3*Np2;
+
+                % print loop indicador
+                if mod(ngrid,sqrt_Ngrid) == 0
+                    disp(['ngrid = ',num2str(ngrid)]);
+                end
+
+                % update design variable
+                kappa  = X4(np4);
+
+                % define physical paramters vector
+                param.ksi    = ksi;
+                param.chi    = chi;
+                param.lambda = lambda;
+                param.kappa  = kappa;
+
+                % penalized objective function S(x)
+                [S(ngrid),power(ngrid),K01(ngrid)] = ...
+                            PiezoMagBeam_ObjFunc(param,hyperparam);
+
+                % update global maximum
+                if S(ngrid) > S_opt
+
+                      S_opt =     S(ngrid);
+                  power_opt = power(ngrid);
+                    K01_opt =   K01(ngrid);
+                      X_opt = [ksi; chi; lambda; kappa];
+                end
+                
+                % print local values in data file
+                fprintf(fileID,formatSpec,...
+                        S(ngrid),power(ngrid),K01(ngrid),...
+                        X1(np1),X2(np2),X3(np3),X4(np4));
+            end
         end
-        
-        % print local values in data file
-        fprintf(fileID,formatSpec,...
-                S(ngrid),power(ngrid),K01(ngrid),X1(np1),X2(np2));
-        
     end
 end
 
 % print global optimum in the data file
-%fprintf(fileID,'\n');
-fprintf(fileID,'\n\nGlobal maximum (ObjFunc power K01 f Omega):\n');
-fprintf(fileID,formatSpec,S_opt,power_opt,K01_opt,X_opt(1),X_opt(2));
+fprintf(fileID,'\n\nGlobal maximum (ObjFunc power K01 ksi chi lambda kappa):\n');
+fprintf(fileID,formatSpec,...
+        S_opt,power_opt,K01_opt,X_opt(1),X_opt(2),X_opt(3),X_opt(4));
 
 % close data file
 fclose(fileID);
 
 % display global optimum on the screen
-fprintf('\n\nGlobal maximum (ObjFunc power K01 f Omega):\n');
-fprintf(formatSpec,S_opt,power_opt,K01_opt,X_opt(1),X_opt(2));
+fprintf('\n\nGlobal maximum (ObjFunc power K01 ksi chi lambda kappa):\n');
+fprintf(formatSpec,...
+        S_opt,power_opt,K01_opt,X_opt(1),X_opt(2),X_opt(3),X_opt(4));
 fprintf('\n');
 
 disp(' ');
@@ -314,85 +330,6 @@ disp('    ... ');
 disp(' ');
 
 save([num2str(case_name),'.mat']);
-
-toc
-% -----------------------------------------------------------
-
-
-% post processing
-% -----------------------------------------------------------
-tic
-disp(' ');
-disp(' --- post processing --- ');
-disp(' ');
-disp('    ... ');
-disp(' ');
-
-% map to a 2d data structure
-% (x = columns and y = lines)
-    S = reshape(S    ,Np2,Np1);
-power = reshape(power,Np2,Np1);
-  K01 = reshape(K01  ,Np2,Np1);
-
-
-% plot performance function countourmap
-% ......................................................
-gtitle = ' objective function contour map';
-xlab   = ' excitation amplitude';
-ylab   = ' excitation frequency';
-xmin   = X_min(1);
-xmax   = X_max(1);
-ymin   = X_min(2);
-ymax   = X_max(2);
-gname  = [case_name,'__objfunc'];
-flag   = 'eps';
-fig1   = graph_contour_pnt(X1,X2,S'/S_opt,...
-                           X_opt(1),X_opt(2),...
-                           gtitle,xlab,ylab,xmin,xmax,ymin,ymax,gname,flag);
-%close(fig1);
-% ......................................................
-
-
-% plot mean power countourmap
-% ......................................................
-gtitle = ' mean power contour map';
-xlab   = ' excitation amplitude';
-ylab   = ' excitation frequency';
-xmin   = X_min(1);
-xmax   = X_max(1);
-ymin   = X_min(2);
-ymax   = X_max(2);
-gname  = [case_name,'__mean_power'];
-flag   = 'eps';
-fig2   = graph_contour_pnt(X1,X2,power'/power_opt,...
-                           X_opt(1),X_opt(2),...
-                           gtitle,xlab,ylab,xmin,xmax,ymin,ymax,gname,flag);
-
-%close(fig2);
-% ......................................................
-
-
-% plot 0-1 identification parameter
-% ......................................................
-xlab   = 'excitation amplitude';
-ylab   = 'excitation frequency';
-label0 = 'regular';
-label1 = 'chaos';
-gtitle = '0-1 test for chaos';
-xmin   = X_min(1);
-xmax   = X_max(1);
-ymin   = X_min(2);
-ymax   = X_max(2);
-zmin   = 0;
-zmax   = 1;
-gname  = [case_name,'__01test'];
-flag   = 'eps';
-fig3   = graph_binarymap(X1,X2,K01,...                          
-                         X_opt(1),X_opt(2),...
-                         gtitle,xlab,ylab,label0,label1,...
-                         xmin,xmax,ymin,ymax,zmin,zmax,gname,flag);
-%close(fig3);
-% ......................................................
 
 toc
 % -----------------------------------------------------------
