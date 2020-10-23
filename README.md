@@ -6,8 +6,8 @@ This package includes the following files:
 * CrossEntropyOpt_Example.m.  -- script with an one dimensional optimization with the CE method
 * HarvesterOpt_DirectSearch.m -- script with a program to optimize the harveters via direct serach
 * HarvesterOpt_CrossEntropy.m -- script with a program to optimize the harveters via CE method
-* PiezoMagBeam_PerfFunc.m.    -- function that defines the objetive function
-* PiezoMagBeam_Power.m.       -- function to compute the output power
+* PiezoMagBeam_ObjFunc.m.     -- function that defines the objetive function
+* PiezoMagBeam_ObjFuncNoise.m -- function that defines the objetive function with noise
 * PiezoMagBeam_RHS.m          -- function that defines the harvester equations
 * test01chaos.m               -- function to compute the 0-1 test for chaos
 * trandn.m                    -- function to draw samples from truncated distribution
@@ -20,6 +20,11 @@ This package includes the following files:
 This code was developed to optimize the amount of energy recovered by a nonlinear bistable piezoelectric energy harvester. The simulation results associated with this optimization process are reported in the following paper:
 - *Americo Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, 2020*
 https://hal.archives-ouvertes.fr/hal-01531845v3
+
+## Videos
+Animations illustrating the operation of the CE method can be seen in the following playlist:
+- https://www.youtube.com/playlist?list=PLjNDdMKtfqVnU4QIubzpeE25szNEbEdBZ
+
 
 ## Author
 - Americo Cunha
