@@ -35,7 +35,7 @@ We ask the code users to cite the following manuscript in any publications repor
 https://hal.archives-ouvertes.fr/hal-01531845v3
 
 ```
-@article{CunhaJr2020,
+@article{CunhaJr2021,
    author  = {A. {Cunha~Jr}},
    title   = {Enhancing the performance of a bistable energy harvesting device via the cross-entropy method},
    journal = {Nonlinear Dynamics},
