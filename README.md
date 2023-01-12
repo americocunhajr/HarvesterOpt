@@ -35,7 +35,7 @@ We ask the code users to cite the following manuscript in any publications repor
 - *A. Cunha Jr, Enhancing the performance of a bistable energy harvesting device via the cross-entropy method, Nonlinear Dynamics, 103:137-155, 2021 https://doi.org/10.1007/s11071-020-06109-0*
 
 ```
-@article{CunhaJr2021,
+@article{CunhaJr2021p137,
    author  = {A. {Cunha~Jr}},
    title   = {Enhancing the performance of a bistable energy harvesting device via the cross-entropy method},
    journal = {Nonlinear Dynamics},
