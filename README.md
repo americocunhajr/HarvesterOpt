@@ -7,6 +7,7 @@
 ### Table of Contents
 - [Overview](#overview)
 - [Usage](#usage)
+- [Features](#features)
 - [Documentation](#documentation)
 - [Videos](#videos)
 - [Author](#author)
@@ -20,6 +21,14 @@
 - **A. Cunha Jr**, *Enhancing the performance of a bistable energy harvesting device via the cross-entropy method*, Nonlinear Dynamics, 103:137-155, 2021 <a href="https://doi.org/10.1007/s11071-020-06109-0" target="_blank">DOI</a>
 
 Preprint available <a href="https://hal.archives-ouvertes.fr/hal-01531845v3" target="_blank">here</a>.
+
+### Features
+- Optimizes energy recovery in bistable piezo-magneto-elastic energy harvesting systems
+- Utilizes advanced optimization algorithms for maximum efficiency
+- Supports customization of optimization parameters and constraints
+- Includes visualization tools for simulation results
+- Offers well-documented, easy-to-understand code
+- Designed with an educational approach for intuitive use
 
 ### Usage
 To get started with **HarvesterOpt**, follow these steps:
