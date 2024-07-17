@@ -1,6 +1,6 @@
 ## Harvester Optimizer
 
-**HarvesterOpt: Harvester Optimizer** is Matlab code that solves an optimization problem to maximize the energy recovered by a bistable piezo-magneto-elastic energy harvesting system.
+**HarvesterOpt: Harvester Optimizer** is Matlab code designed to solve optimization problems aimed at maximizing the energy recovery of bistable piezo-magneto-elastic energy harvesting systems. This tool leverages the Cross-Entropy method to enhance the performance and efficiency of energy harvesters, making it a valuable asset for researchers and engineers in the field of energy harvesting.
 
 ### Table of Contents
 - [Overview](#overview)
@@ -15,7 +15,7 @@
 
 ### Overview
 **HarvesterOpt** was developed to optimize the amount of energy recovered by a nonlinear bistable piezoelectric energy harvester. The underlying results are reported in the following publication:
-- **A. Cunha Jr**, *Enhancing the performance of a bistable energy harvesting device via the cross-entropy method*, Nonlinear Dynamics, 103:137-155, 2021 [DOI](https://doi.org/10.1007/s11071-020-06109-0)
+- **A. Cunha Jr**, *Enhancing the performance of a bistable energy harvesting device via the cross-entropy method*, Nonlinear Dynamics, 103:137-155, 2021 <a href="https://doi.org/10.1007/s11071-020-06109-0" target="_blank">DOI</a>
 
 Preprint available <a href="https://hal.archives-ouvertes.fr/hal-01531845v3" target="_blank">here</a>.
 
