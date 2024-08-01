@@ -12,6 +12,7 @@
 - [Overview](#overview)
 - [Usage](#usage)
 - [Features](#features)
+- [Usage](#usage)
 - [Documentation](#documentation)
 - [Videos](#videos)
 - [Author](#author)
