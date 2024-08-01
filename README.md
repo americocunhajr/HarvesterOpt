@@ -10,7 +10,6 @@
 
 ### Table of Contents
 - [Overview](#overview)
-- [Usage](#usage)
 - [Features](#features)
 - [Usage](#usage)
 - [Documentation](#documentation)
