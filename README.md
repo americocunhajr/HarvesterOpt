@@ -98,7 +98,7 @@ If you use **HarvesterOpt** in your research, please cite the following publicat
 
 ### Institutional support
 
-<img src="logo/logo_uerj_color.jpeg" width="10%">
+<img src="logo/logo_uerj.png" width="13%">
 
 ### Funding
 
